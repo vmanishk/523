@@ -1,14 +1,16 @@
+## Finding K based on RPC. implemented  by Gaurav Gopalkrishna.
 import Constants
 import math
 import subprocess
 import timeit
 import numpy as np
 import matplotlib.pyplot as plt
+import sys,os
 
 SUBSET_COUNT = 5
-START_K = 5
-END_K = 31
-INCREMENT_K = 5
+START_K = 2
+END_K = 30
+INCREMENT_K = 1
 
 def convertWordIds(wordIds):
     dictionary = dict()
@@ -66,18 +68,6 @@ def calculatePerplexity(testData, topic_cnt):
         wordDistLines = wordDistFile.readlines()
     wordDistFile.close()
 
-    # total_pp = 0
-    # for line in topicDistLines:
-    #     totalLogValue = 0
-    #     distValues = line.split()
-    #     for value in distValues:
-    #         totalLogValue = totalLogValue + math.log10(float(value))
-    #         total_pp = total_pp + math.fabs(totalLogValue)/topic_cnt
-    #
-    # pp = total_pp/len(testData)
-    # print("PP=", pp)
-    # return pp
-
     word_id_file = open(Constants.OUTPUT_FOLDER_PATH + "test/doc_wids.txt", "r")
     wordsIds = word_id_file.readlines()
     topic_dist = getNParray(topicDistLines)
@@ -119,7 +109,6 @@ if __name__ == '__main__':
 
     perplexity = list()
     rpc = list()
-    rpc = list()
     k = START_K
 
     log_file = open(Constants.FULL_DATA_FOLDER_PATH + "log.txt", 'w')
@@ -155,7 +144,9 @@ if __name__ == '__main__':
             tc, pp2 = perplexity[len(perplexity) - 1]
             tc, pp1 = perplexity[len(perplexity) - 2]
             print(topic_cnt, ":rpc:", str((pp2 - pp1)/INCREMENT_K), file=log_file)
-            rpc.append((topic_cnt, (pp2 - pp1)/INCREMENT_K))
+            temp = (pp2 - pp1)/INCREMENT_K
+            temp = abs(temp)  ## changes made to take the absolute value
+            rpc.append((topic_cnt, temp))
         del pp[:]
 
     print(rpc)
@@ -173,7 +164,7 @@ if __name__ == '__main__':
         pps.append(each[1] * 10000)
 
     plt.plot(tpcs, pps)
-    plt.ylabel('Perplexity')
+    plt.ylabel('RPC')
     plt.xlabel('Topic Count')
     plt.show()
 

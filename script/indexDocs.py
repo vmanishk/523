@@ -4,19 +4,20 @@
 from __future__ import print_function
 import sys
 
-
+UNKNOWN_WORD = "#U8NK$#"
 w2id = {}
 
 def indexFile(pt, res_pt):
     print('index file: '+str(pt))
     wf = open(res_pt, 'w')
+    w2id[UNKNOWN_WORD] = 0
     for l in open(pt):
         ws = l.strip().split()
         for w in ws:
             if w not in w2id:
                 w2id[w] = len(w2id)
-                
-        wids = [w2id[w] for w in ws]  
+
+        wids = [w2id[w] for w in ws]
         print(' '.join(map(str, wids)), file=wf)
     print('write file: '+str(res_pt))
 

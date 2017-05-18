@@ -4,7 +4,10 @@
 # Input:
 #    mat/pw_z.k20
 
+import math
 import sys
+
+
 
 # return:    {wid:w, ...}
 def read_voca(pt):
@@ -33,6 +36,7 @@ def dispTopics(pt, voca, pz):
     print('p(z)\t\tTop words')
     for pz, s in sorted(topics, reverse=True):
         print('%f\t%s' % (pz, s))
+        print('\n')
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
